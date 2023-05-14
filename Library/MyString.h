@@ -28,6 +28,8 @@ public:
 	MyString& operator+=(const char& letter); // Appends a character to the end of the string
 	MyString& operator+=(const MyString& rhs); // Appends another string to the end of the string
 
+	MyString operator+(const MyString& rhs);
+
 	bool operator==(const MyString& rhs) const; // Equality comparison operator
 
 	char& at(size_t pos); // Returns a reference to the character at a specified position

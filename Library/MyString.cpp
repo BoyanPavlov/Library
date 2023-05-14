@@ -26,6 +26,13 @@ void MyString::freeMem()
 
 void MyString::resize()
 {
+	if (!_capacity)
+	{
+		_capacity = 10;
+		_str = allocateString(_capacity);
+		return;
+	}
+
 	_capacity *= 2;
 	try
 	{
@@ -102,6 +109,7 @@ MyString& MyString::operator=(MyString&& obj)
 	std::swap(_str, obj._str);
 	std::swap(_capacity, obj._capacity);
 	std::swap(_size, obj._capacity);
+	return *this;
 }
 
 
@@ -148,6 +156,28 @@ MyString& MyString::operator+=(const MyString& rhs)
 
 	return *this;
 }
+
+
+MyString MyString::operator+(const MyString& rhs)
+{
+	char* tmpStr = allocateString(_size + rhs._size);
+	int index = 0;
+
+	for (size_t i = 0; i < _size; i++)
+	{
+		tmpStr[index++] = _str[i];
+	}
+
+	for (size_t i = 0; i < rhs._size; i++)
+	{
+		tmpStr[index++] = rhs[i];
+	}
+
+	MyString tmpObj(tmpStr);
+	delete[] tmpStr;
+	return tmpObj;
+}
+
 
 bool MyString::operator==(const MyString& rhs) const
 {
@@ -244,7 +274,8 @@ bool MyString::empty() const
 void MyString::clear()
 {
 	freeMem();
-	_str = allocateString(_size);
+	_str = allocateString(_capacity);
+	_size = 0;
 }
 
 void MyString::push_back(char c)
@@ -303,6 +334,7 @@ int MyString::find_the_last_c(char c) const
 std::ostream& operator<<(std::ostream& out, const MyString& obj)
 {
 	out << obj._str;
+	return out;
 }
 
 std::istream& operator>>(std::istream& in, MyString& obj)
@@ -311,4 +343,5 @@ std::istream& operator>>(std::istream& in, MyString& obj)
 	in >> tmp;
 	MyString tmpObj(tmp);
 	obj = tmp;
+	return in;
 }
