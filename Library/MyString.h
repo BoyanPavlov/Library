@@ -31,6 +31,7 @@ public:
 	MyString operator+(const MyString& rhs);
 
 	bool operator==(const MyString& rhs) const; // Equality comparison operator
+	bool operator!=(const MyString& rhs) const; // Equality comparison operator
 
 	char& at(size_t pos); // Returns a reference to the character at a specified position
 	const char& at(size_t pos) const; // Returns a const reference to the character at a specified position

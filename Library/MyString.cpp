@@ -188,6 +188,11 @@ bool MyString::operator==(const MyString& rhs) const
 	return false;
 }
 
+bool MyString::operator!=(const MyString& rhs) const
+{
+	return !operator==(rhs);
+}
+
 
 char& MyString::at(size_t pos)
 {
