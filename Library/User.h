@@ -12,7 +12,7 @@ enum e_UserAccessLevel
 
 class User
 {
-private:
+protected:
     MyString _username;      // User's username
     MyString _password;      // User's password
     int _accessLevel;        // User's access level (e_ADMIN or e_USER)

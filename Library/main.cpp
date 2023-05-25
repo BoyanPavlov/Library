@@ -2,9 +2,18 @@
 //
 
 #include <iostream>
+#include "MyString.h"
+#include "Book.h"
+#include "UserController.h"
 
-//int main()
-//{
-//	std::cout << "hello dear\n";
-//	return 0;
-//}
+/*int main()
+{
+	UserController& instace = UserController::getInstance();
+	MyString username = "Iliev";
+	MyString password = "salam1";
+
+	instace.addUser(username, password);
+	instace.addUser(username, password);
+	instace.login(username);
+	return 0;
+}*/

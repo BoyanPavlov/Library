@@ -1,7 +1,10 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "MyString.h"
+#include "UserController.h"
 #include "StringUtils.h"
+#include <sstream>
+
 
 
 TEST_CASE("Test default constructor", "[MyStringTest]") {
@@ -107,4 +110,113 @@ TEST_CASE("Test concatenation", "[MyStringTest]") {
     MyString str2("world!");
     MyString result = str1 + str2;
     REQUIRE(result == MyString("hello world!"));
+}
+
+////////////////////////////////////////////////////////////
+// USER CONTROLLER TESTS
+////////////////////////////////////////////////////////////
+
+TEST_CASE("UserController - addUser and getUserIndex")
+{
+    UserController& controller = UserController::getInstance();
+
+    // Add users
+    controller.addUser("user1", "password1", 1);
+    controller.addUser("user2", "password2", 2);
+    controller.addUser("user3", "password3", 3);
+
+    SECTION("getUserIndex returns correct index")
+    {
+        REQUIRE(controller.getUserIndex("user1") == 0);
+        REQUIRE(controller.getUserIndex("user2") == 1);
+        REQUIRE(controller.getUserIndex("user3") == 2);
+    }
+
+    SECTION("getUserIndex returns -1 for non-existent user")
+    {
+        REQUIRE(controller.getUserIndex("user4") == -1);
+    }
+
+    SECTION("checkIfUserAlreadyExist returns true for existing user")
+    {
+        REQUIRE(controller.checkIfUserAlreadyExist("user1") == true);
+        REQUIRE(controller.checkIfUserAlreadyExist("user2") == true);
+        REQUIRE(controller.checkIfUserAlreadyExist("user3") == true);
+    }
+
+    SECTION("checkIfUserAlreadyExist returns false for non-existent user")
+    {
+        REQUIRE(controller.checkIfUserAlreadyExist("user4") == false);
+    }
+}
+
+TEST_CASE("UserController - login and logout")
+{
+    UserController& controller = UserController::getInstance();
+
+    // Add users
+    controller.addUser("user1", "password1", 1);
+    controller.addUser("user2", "password2", 2);
+
+    SECTION("login with correct password")
+    {
+        // Simulate user input
+        std::stringstream input;
+        input << "password1\n";
+        std::cin.rdbuf(input.rdbuf());
+
+        // Redirect cout for validation
+        std::stringstream output;
+        std::streambuf* coutBuffer = std::cout.rdbuf(output.rdbuf());
+
+        controller.login("user1");
+
+        // Restore cout
+        std::cout.rdbuf(coutBuffer);
+
+        REQUIRE(output.str() == "Enter user1's password:  Welcome user1\n");
+    }
+
+    SECTION("login with wrong password")
+    {
+        // Simulate user input
+        std::stringstream input;
+        input << "wrongpassword\n";
+        input << "password1\n";
+        std::cin.rdbuf(input.rdbuf());
+
+        // Redirect cout for validation
+        std::stringstream output;
+        std::streambuf* coutBuffer = std::cout.rdbuf(output.rdbuf());
+
+        controller.login("user1");
+
+        // Restore cout
+        std::cout.rdbuf(coutBuffer);
+
+        REQUIRE(output.str() == "Enter user1's password:  Wrong password\nEnter user1's password:  ");
+    }
+
+    SECTION("logout")
+    {
+        // Simulate user input
+        std::stringstream input;
+        input << "password1\n";
+        std::cin.rdbuf(input.rdbuf());
+
+        // Redirect cout for validation
+        std::stringstream output;
+        std::streambuf* coutBuffer = std::cout.rdbuf(output.rdbuf());
+
+        // Login user1
+        controller.login("user1");
+
+        // Logout user1
+        controller.logout("user1");
+
+        // Restore cout
+        std::cout.rdbuf(coutBuffer);
+
+        REQUIRE(output.str() ==  "Enter user1's password:  Welcome user1\nHave a good day user1\n");
+    }
 }
