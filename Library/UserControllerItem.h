@@ -10,6 +10,7 @@ class UserControllerItem : public User
 private:
 	bool _isLogged;
 public:
+	UserControllerItem():_isLogged(false){}
 	UserControllerItem(const MyString& username, const MyString& password, int accessLevel);
 
 	void logUser();

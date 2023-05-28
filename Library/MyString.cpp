@@ -195,7 +195,7 @@ bool MyString::operator!=(const MyString& rhs) const
 
 bool compareStrings(const MyString& leftStr, const MyString& rightStr, bool asc)
 {
-	bool result = asc ? leftStr > rightStr : rightStr > leftStr;
+	bool result = asc ? leftStr < rightStr : rightStr < leftStr;
 	return result;
 }
 

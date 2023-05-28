@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Book.h"
+#include "MyVector.hpp"
 
 #ifndef _LIBRARY_
 #define _LIBRARY_
@@ -10,22 +11,17 @@ const int INITIAL_CAPACITY = 10;
 class Library
 {
 private:
-	Book* _books;
-	int _size;
-	int _capacity;
+	MyVector<Book> _books;
 
-	Book* allocateBooks(int size);
-	void freeBooksMem();
-	void resizeLibrary();
-
+	void sortBooksByAuthorHelper(MyVector<Book>& books, Book currentBook, int size, bool acs);
+	void sortBooksByTitleHelper(MyVector<Book>& books, Book currentBook, int size, bool acs);
+	void sortBooksByRatingHelper(MyVector<Book>& books, Book currentBook, int size, bool acs);
+	void sortBooksByYearHelper(MyVector<Book>& books, Book currentBook, int size, bool acs);
 public:
 
 	Library();
-	Library(const Library& obj);
-	Library& operator=(const Library& obj);
-	~Library();
 
-	Book* getBooks() const;
+	const MyVector<Book>& getBooks() const;
 
 	void printAll();// prints all books: title, author, genre, isbn
 
@@ -36,11 +32,12 @@ public:
 	int findBookIndexByTitle(const MyString& input);
 
 	void sortBooksByAuthor(bool acs = true);//sort by acsending
-	void sortBooksByGenre(bool acs = true);//sort by acsending
+	void sortBooksByRating(bool acs = true);//sort by acsending
 	void sortBooksByTitle(bool acs = true);//sort by acsending
+	void sortBooksByYear(bool acs = true);//sort by acsending
 
-	void addBook(const Book* obj);
-	void removeBook(const Book* obj);
+	void addBook(const Book& obj);
+	void removeBook(const Book& obj);
 };
 
 #endif // !_LIBRARY_

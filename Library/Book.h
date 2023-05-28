@@ -1,5 +1,6 @@
 #pragma once
 #include "MyString.h"
+#include "MyVector.hpp"
 
 #ifndef _BOOK_
 #define _BOOK_
@@ -12,34 +13,18 @@ private:
 	MyString _genre;                // Genre of the book
 	MyString _shortDescription;     // Short description of the book
 	int _yearOfPublishing;          // Year of publishing
-	MyString* _keyWords;            // Array of keywords associated with the book
+	MyVector<MyString> _keyWords;            // Array of keywords associated with the book
 	int _rating;                    // Rating of the book
 	int _isbn;                      // ISBN number of the book
 
-	// Helper methods for managing the dynamic memory of _keyWords
-	int _numberOfKeyWords;
-	MyString* allocateKeyWords(int numberOfKeyWords);    // Allocates memory for _keyWords array
-	void freeKeyWordsMem();                              // Frees the memory of _keyWords array
-	void copyKeyWords(const MyString* keyWords);         // Copies the keywords from the provided array
-
 public:
-	int getNumKeywords() const;  // Calculates the number of keywords in the array
 
 	// Default constructor
 	Book();
 
 	// Parameterized constructor
 	Book(const MyString& author, const MyString& title, const MyString& genre, const MyString& shortDescription,
-		int yearOfPublishing, const MyString* keyWords, int numberOfKeyWords, int rating, int isbn);
-
-	// Copy constructor
-	Book(const Book& other);
-
-	// Destructor
-	~Book();
-
-	// Assignment operator
-	Book& operator=(const Book& other);
+		int yearOfPublishing, const MyVector<MyString> keyWords, int rating, int isbn);
 
 	// Getter methods for private members
 	const MyString& getAuthor() const;
@@ -47,7 +32,7 @@ public:
 	const MyString& getGenre() const;
 	const MyString& getShortDescription() const;
 	int getYearOfPublishing() const;
-	const MyString* getKeyWords() const;
+	const MyVector<MyString>& getKeyWords() const;
 	int getRating() const;
 	int getISBN() const;
 
@@ -57,9 +42,10 @@ public:
 	void setGenre(const MyString& genre);
 	void setShortDescription(const MyString& shortDescription);
 	void setYearOfPublishing(int yearOfPublishing);
-	void setKeyWords(const MyString* keyWords,int numberOfKeyWords);
+	void setKeyWords(MyVector<MyString> keywords);
 	void setRating(int rating);
 
+	bool operator==(const Book& obj);
 	friend std::ostream& operator<<(std::ostream& out, const Book& obj);
 };
 

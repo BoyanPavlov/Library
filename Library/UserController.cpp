@@ -5,58 +5,38 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-//to test this one
-UserControllerItem** UserController::allocateUsers(int size)
+
+MyVector<UserControllerItem>& UserController::getUsers()
 {
-	UserControllerItem** tmp = nullptr;
-	try
-	{
-		tmp = new UserControllerItem * [size]();
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what() << endl;
-		delete[] tmp;
-	}
-	return tmp;
+	return _users;
 }
 
-UserController::UserController()
-	:_size(0), _capacity(INITIAL_SIZE), _users(nullptr)
+const MyVector<UserControllerItem>& UserController::getUsers() const
 {
-	_users = allocateUsers(INITIAL_SIZE);
+	return _users;
 }
 
-void UserController::freeUsersMem()
+UserControllerItem& UserController::getUser(const MyString& user)
 {
-	for (size_t i = 0; i < _capacity; i++)
+	int index = getUserIndex(user);
+	if (index>=0)
 	{
-		delete _users[i];
+		return _users[index];
 	}
-	delete[] _users;
-	_users = nullptr;
+	throw std::exception("User doesn't exist in the current list\n");
 }
 
-void UserController::resizeUsersArr()
+UserController& UserController::getInstance()
 {
-	_capacity *= 2;
-	UserControllerItem** tmp = allocateUsers(_capacity);
-	for (size_t i = 0; i < _size; i++)
-	{
-		//shallow copy
-		tmp[i] = _users[i];
-	}
-	//deleting the arr pointer
-	delete[] _users;
-	_users = tmp;
+	static UserController obj;
+	return obj;
 }
 
-
-int UserController::getUserIndex(const MyString& userName)
+int UserController::getUserIndex(const MyString& username)
 {
-	for (size_t i = 0; i < _size; i++)
+	for (size_t i = 0; i < _users.getSize() ; i++)
 	{
-		if (_users[i]->getUsername() == userName)
+		if (_users[i].getUsername() == username)
 		{
 			return i;
 		}
@@ -65,23 +45,12 @@ int UserController::getUserIndex(const MyString& userName)
 }
 
 
-UserController& UserController::getInstance()
-{
-	static UserController obj;
-	return obj;
-}
-
-UserController::~UserController()
-{
-	freeUsersMem();
-}
-
 void UserController::login(const MyString& username)
 {
 	int index = getUserIndex(username);
 	if (index >= 0)
 	{
-		UserControllerItem& user = *_users[index];
+		UserControllerItem& user = _users[index];
 
 		cout << "Enter " << user << "'s password:  ";
 		MyString enteredPassword;
@@ -113,7 +82,7 @@ void UserController::logout(const MyString& username)
 	int index = getUserIndex(username);
 	if (index >= 0)
 	{
-		UserControllerItem& user = *_users[index];
+		UserControllerItem& user = _users[index];
 
 		if (!user.getLoginStatus())
 		{
@@ -139,21 +108,8 @@ void UserController::addUser(const MyString& userName, const MyString& password,
 		return;
 	}
 
-	try
-	{
-		UserControllerItem* newUser = new UserControllerItem(userName, password, accessLevel);
-		if (_size == _capacity)
-		{
-			resizeUsersArr();
-		}
-		_users[_size++] = newUser;
-	}
-	catch (const std::exception& e)
-	{
-		//TODO
-		cerr << e.what() << endl;
-		freeUsersMem();
-	}
+	UserControllerItem newUser(userName, password, accessLevel);
+	_users.push(newUser);
 
 	cout << "User: " << userName << " successfully added\n";
 }
@@ -161,11 +117,7 @@ void UserController::addUser(const MyString& userName, const MyString& password,
 void UserController::removeUser(const MyString& userName)
 {
 	int index = getUserIndex(userName);
-	if (index >= 0)
-	{
-		std::swap(_users[index], _users[_size]);
-		delete _users[_size--];
-	}
+	_users.removeAt(index);
 }
 
 bool UserController::checkIfUserAlreadyExist(const MyString& userName)

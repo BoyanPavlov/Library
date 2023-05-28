@@ -5,95 +5,25 @@ using std::cin;
 using std::endl;
 using std::cerr;
 
-Book* Library::allocateBooks(int size)
-{
-	Book* tmp = nullptr;
-	try
-	{
-		tmp = new Book[size];
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-		delete[] tmp;
-	}
-	return tmp;
-}
-
-void Library::freeBooksMem()
-{
-	delete[] _books;
-	_books = nullptr;
-}
-
-void Library::resizeLibrary()
-{
-	_capacity *= 2;
-	Book* tmp = allocateBooks(_capacity);
-	for (size_t i = 0; i < _size; i++)
-	{
-		tmp[i] = _books[i];
-	}
-	freeBooksMem();
-	_books = tmp;
-}
 
 Library::Library()
-	: _books(nullptr), _size(0), _capacity(INITIAL_CAPACITY)
 {
-	_books = allocateBooks(_capacity);
 }
 
 
-Library::Library(const Library& obj)
-	: _books(nullptr), _size(obj._size), _capacity(obj._capacity)
-{
-	if (_size > 0) {
-		_books = allocateBooks(_capacity);
-		for (int i = 0; i < _size; i++)
-		{
-			_books[i] = obj._books[i];
-		}
-	}
-}
-
-Library& Library::operator=(const Library& obj)
-{
-	if (this != &obj)
-	{
-		freeBooksMem();
-
-		_size = obj._size;
-		_capacity = obj._capacity;
-
-		if (_size > 0)
-		{
-			_books = allocateBooks(_capacity);
-			for (int i = 0; i < _size; i++) {
-				_books[i] = obj._books[i];
-			}
-		}
-	}
-	return *this;
-}
-
-Library::~Library() {
-	freeBooksMem();
-}
-
-Book* Library::getBooks() const {
+const MyVector<Book>& Library::getBooks() const {
 	return _books;
 }
 
 void Library::printAll() {
-	for (int i = 0; i < _size; i++) {
-		cout << _books[i];
+	for (int i = 0; i < _books.getSize(); i++) {
+		cout << _books[i] << endl;
 	}
 }
 
 void Library::bookInfo(int isbn)
 {
-	for (int i = 0; i < _size; i++)
+	for (int i = 0; i < _books.getSize(); i++)
 	{
 		if (_books[i].getISBN() == isbn)
 		{
@@ -106,7 +36,7 @@ void Library::bookInfo(int isbn)
 
 int Library::findBookIndexByAuthor(const MyString& input)
 {
-	for (int i = 0; i < _size; i++)
+	for (int i = 0; i < _books.getSize(); i++)
 	{
 		if (_books[i].getAuthor() == input)
 		{
@@ -117,7 +47,7 @@ int Library::findBookIndexByAuthor(const MyString& input)
 }
 
 int Library::findBookIndexByGenre(const MyString& input) {
-	for (int i = 0; i < _size; i++)
+	for (int i = 0; i < _books.getSize(); i++)
 	{
 		if (_books[i].getGenre() == input)
 		{
@@ -130,7 +60,7 @@ int Library::findBookIndexByGenre(const MyString& input) {
 
 int Library::findBookIndexByTitle(const MyString& input)
 {
-	for (int i = 0; i < _size; i++)
+	for (int i = 0; i < _books.getSize(); i++)
 	{
 		if (_books[i].getTitle() == input)
 		{
@@ -140,56 +70,125 @@ int Library::findBookIndexByTitle(const MyString& input)
 	return -1;
 }
 
+void Library::sortBooksByAuthorHelper(MyVector<Book>& books, Book currentBook, int size, bool acs)
+{
+	int index = size;
+
+	while (index > 0 && compareStrings(_books[index - 1].getAuthor(), currentBook.getAuthor(), !acs))
+	{
+		_books[index] = _books[index - 1];
+		--index;
+	}
+	_books[index] = currentBook;
+}
+
+void Library::sortBooksByTitleHelper(MyVector<Book>& books, Book currentBook, int size, bool acs)
+{
+	int index = size;
+
+	while (index > 0 && compareStrings(_books[index - 1].getTitle(), currentBook.getTitle(), !acs))
+	{
+		_books[index] = _books[index - 1];
+		--index;
+	}
+	_books[index] = currentBook;
+}
+
+void Library::sortBooksByRatingHelper(MyVector<Book>& books, Book currentBook, int size, bool acs)
+{
+	int index = size;
+
+	if (acs)
+	{
+		while (index > 0 && _books[index - 1].getRating() > currentBook.getRating())
+		{
+			_books[index] = _books[index - 1];
+			--index;
+		}
+	}
+	else
+	{
+		while (index > 0 && _books[index - 1].getRating() < currentBook.getRating())
+		{
+			_books[index] = _books[index - 1];
+			--index;
+		}
+	}
+
+	_books[index] = currentBook;
+}
+
+void Library::sortBooksByYearHelper(MyVector<Book>& books, Book currentBook, int size, bool acs)
+{
+	int index = size;
+
+	if (acs)
+	{
+		while (index > 0 && _books[index - 1].getYearOfPublishing() > currentBook.getYearOfPublishing())
+		{
+			_books[index] = _books[index - 1];
+			--index;
+		}
+	}
+	else
+	{
+		while (index > 0 && _books[index - 1].getYearOfPublishing() < currentBook.getYearOfPublishing())
+		{
+			_books[index] = _books[index - 1];
+			--index;
+		}
+	}
+
+	_books[index] = currentBook;
+}
+
+
+
 void Library::sortBooksByAuthor(bool acs)
 {
-	for (size_t i = 1; i < _size; ++i)
+	for (size_t i = 1; i < _books.getSize(); ++i)
 	{
-		Book& currentBook = _books[i];
-		int j = i;
-		while (j > 0 && compareStrings(_books[j - 1].getAuthor(), currentBook.getAuthor(), acs))
-		{
-			_books[j] = _books[j - 1];
-			--j;
-		}
-		_books[j] = currentBook;
+		sortBooksByAuthorHelper(_books, _books[i], i, acs);
 	}
 }
 
-void Library::sortBooksByGenre(bool acs)
+void Library::sortBooksByRating(bool acs)
 {
-	for (size_t i = 1; i < _size; ++i)
+	for (size_t i = 1; i < _books.getSize(); ++i)
 	{
-		Book& currentBook = _books[i];
-		int j = i;
-		while (j > 0 && compareStrings(_books[j - 1].getGenre(), currentBook.getGenre(), acs))
-		{
-			_books[j] = _books[j - 1];
-			--j;
-		}
-		_books[j] = currentBook;
+		sortBooksByRatingHelper(_books, _books[i], i, acs);
 	}
 }
 void Library::sortBooksByTitle(bool acs)
 {
-	for (size_t i = 1; i < _size; ++i)
+	for (size_t i = 1; i < _books.getSize(); ++i)
 	{
-		Book& currentBook = _books[i];
-		int j = i;
-		while (j > 0 && compareStrings(_books[j - 1].getTitle(), currentBook.getTitle(), acs))
-		{
-			_books[j] = _books[j - 1];
-			--j;
-		}
-		_books[j] = currentBook;
+		sortBooksByTitleHelper(_books, _books[i], i, acs);
 	}
 }
 
-void Library::addBook(const Book* obj)
+void Library::sortBooksByYear(bool acs)
 {
-
+	for (size_t i = 1; i < _books.getSize(); ++i)
+	{
+		sortBooksByYearHelper(_books, _books[i], i, acs);
+	}
 }
 
-void Library::removeBook(const Book* obj)
+void Library::addBook(const Book& obj)
 {
+	_books.push(obj);
+}
 
+void Library::removeBook(const Book& obj)
+{
+	for (size_t i = 0; i < _books.getSize(); i++)
+	{
+		if (_books[i] == obj)
+		{
+			_books.removeAt(i);
+			return;
+		}
+	}
+	throw std::exception("Book isn't in the collection\n");
 }

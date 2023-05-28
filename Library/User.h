@@ -7,7 +7,8 @@
 enum e_UserAccessLevel
 {
     e_ADMIN,
-    e_USER
+    e_USER,
+    e_UNDEFINED,
 };
 
 class User
@@ -18,6 +19,7 @@ protected:
     int _accessLevel;        // User's access level (e_ADMIN or e_USER)
 
 public:
+    User() :_accessLevel(e_UNDEFINED) {}
     User(const MyString& username, const MyString& password, int accessLevel); // Constructor
 
     const MyString& getUsername() const;    // Getter for retrieving the username

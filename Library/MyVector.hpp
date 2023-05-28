@@ -73,9 +73,6 @@ public:
 };
 
 
-#endif // !_MY_VECTOR_
-
-
 template <class T>
 T* MyVector<T>::allocateArr(size_t initialCapacity)
 {
@@ -383,3 +380,4 @@ void MyVector<T>::map(T(*f)(const T&))
 	}
 }
 
+#endif // !_MY_VECTOR_
