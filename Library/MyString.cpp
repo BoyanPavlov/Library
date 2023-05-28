@@ -193,6 +193,23 @@ bool MyString::operator!=(const MyString& rhs) const
 	return !operator==(rhs);
 }
 
+bool compareStrings(const MyString& leftStr, const MyString& rightStr, bool asc)
+{
+	bool result = asc ? leftStr > rightStr : rightStr > leftStr;
+	return result;
+}
+
+bool MyString::operator>(const MyString& rhs)const
+{
+	return StringUtils::strGreaterThan(_str, rhs._str);
+}
+
+bool MyString::operator<(const MyString& rhs)const
+{
+	return StringUtils::strGreaterThan(rhs._str, _str);
+}
+
+
 
 char& MyString::at(size_t pos)
 {
@@ -338,7 +355,10 @@ int MyString::find_the_last_c(char c) const
 
 std::ostream& operator<<(std::ostream& out, const MyString& obj)
 {
-	out << obj._str;
+	if (obj._str)
+	{
+		out << obj._str;
+	}
 	return out;
 }
 

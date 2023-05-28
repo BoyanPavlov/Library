@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Book.cpp" />
+    <ClCompile Include="Library.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyString.cpp" />
     <ClCompile Include="StringUtils.cpp" />
@@ -32,7 +33,9 @@
     <ClInclude Include="Book.h" />
     <ClInclude Include="catch.hpp" />
     <ClInclude Include="FileManager.h" />
+    <ClInclude Include="Library.h" />
     <ClInclude Include="MyString.h" />
+    <ClInclude Include="MyVector.hpp" />
     <ClInclude Include="StringUtils.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UserController.h" />

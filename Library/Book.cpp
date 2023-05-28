@@ -1,17 +1,8 @@
 #include "Book.h"
 
-
-int Book::getNumKeywords(const MyString* keyWords) const
+int Book::getNumKeywords() const
 {
-	int count = 0;
-	if (keyWords != nullptr)
-	{
-		while (keyWords[count] != "")
-		{
-			count++;
-		}
-	}
-	return count;
+	return _numberOfKeyWords;
 }
 
 MyString* Book::allocateKeyWords(int numberOfKeyWords)
@@ -39,9 +30,8 @@ void Book::copyKeyWords(const MyString* keyWords)
 {
 	if (keyWords != nullptr)
 	{
-		int numKeywords = getNumKeywords(keyWords);
-		_keyWords = allocateKeyWords(numKeywords);
-		for (int i = 0; i < numKeywords; ++i)
+		_keyWords = allocateKeyWords(_numberOfKeyWords);
+		for (int i = 0; i < _numberOfKeyWords; ++i)
 		{
 			_keyWords[i] = keyWords[i];
 		}
@@ -53,14 +43,14 @@ void Book::copyKeyWords(const MyString* keyWords)
 }
 
 Book::Book()
-	:_keyWords(nullptr), _rating(0), _isbn(0)
+	:_keyWords(nullptr), _numberOfKeyWords(0), _rating(0), _isbn(0),_yearOfPublishing(0)
 {
 
 }
 
 Book::Book(const MyString& author, const MyString& title,
 	const MyString& genre, const MyString& shortDescription,
-	int yearOfPublishing, const MyString* keyWords,
+	int yearOfPublishing, const MyString* keyWords, int numberOfKeyWords,
 	int rating, int isbn)
 	:
 	_author(author),
@@ -69,7 +59,8 @@ Book::Book(const MyString& author, const MyString& title,
 	_shortDescription(shortDescription),
 	_yearOfPublishing(yearOfPublishing),
 	_rating(rating),
-	_isbn(isbn)
+	_isbn(isbn),
+	_numberOfKeyWords(numberOfKeyWords)
 {
 	copyKeyWords(keyWords);
 }
@@ -82,7 +73,8 @@ Book::Book(const Book& other)
 	_shortDescription(other._shortDescription),
 	_yearOfPublishing(other._yearOfPublishing),
 	_rating(other._rating),
-	_isbn(other._isbn)
+	_isbn(other._isbn),
+	_numberOfKeyWords(other._numberOfKeyWords)
 {
 	copyKeyWords(other._keyWords);
 }
@@ -106,6 +98,8 @@ Book& Book::operator=(const Book& other)
 	_genre = other._genre;
 	_shortDescription = other._shortDescription;
 	_yearOfPublishing = other._yearOfPublishing;
+	_numberOfKeyWords = other._numberOfKeyWords;
+
 
 	copyKeyWords(other._keyWords);
 
@@ -170,10 +164,10 @@ const MyString* Book::getKeyWords() const
 	return _keyWords;
 }
 
-void Book::setKeyWords(const MyString* keyWords)
+void Book::setKeyWords(const MyString* keyWords, int numberOfKeyWords)
 {
 	freeKeyWordsMem();
-
+	_numberOfKeyWords = numberOfKeyWords;
 	copyKeyWords(keyWords);
 }
 
@@ -190,4 +184,13 @@ void Book::setRating(int rating)
 int Book::getISBN() const
 {
 	return _isbn;
+}
+
+std::ostream& operator<<(std::ostream& out, const Book& obj)
+{
+	out << obj.getTitle() << " "
+		<< obj.getAuthor() << " "
+		<< obj.getGenre() << " "
+		<< obj.getISBN() << "\n";
+	return out;
 }

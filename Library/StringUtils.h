@@ -11,6 +11,8 @@ public:
 	static int strLen(const char* str);
 
 	static int strCmp(const char* text1, const char* text2);
+
+	static bool strGreaterThan(const char* text1, const char* text2);
 };
 
 #endif // _UTILITIES_

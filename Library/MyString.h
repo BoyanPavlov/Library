@@ -33,6 +33,10 @@ public:
 	bool operator==(const MyString& rhs) const; // Equality comparison operator
 	bool operator!=(const MyString& rhs) const; // Equality comparison operator
 
+	friend bool compareStrings(const MyString& leftStr, const MyString& rightStr, bool asc);//string comparator by the given flag
+	bool operator>(const MyString& rhs)const; //Operator >
+	bool operator<(const MyString& rhs)const; //Operator <
+
 	char& at(size_t pos); // Returns a reference to the character at a specified position
 	const char& at(size_t pos) const; // Returns a const reference to the character at a specified position
 

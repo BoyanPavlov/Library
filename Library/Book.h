@@ -17,19 +17,20 @@ private:
 	int _isbn;                      // ISBN number of the book
 
 	// Helper methods for managing the dynamic memory of _keyWords
-
-	int getNumKeywords(const MyString* keyWords) const;  // Calculates the number of keywords in the array
+	int _numberOfKeyWords;
 	MyString* allocateKeyWords(int numberOfKeyWords);    // Allocates memory for _keyWords array
 	void freeKeyWordsMem();                              // Frees the memory of _keyWords array
 	void copyKeyWords(const MyString* keyWords);         // Copies the keywords from the provided array
 
 public:
+	int getNumKeywords() const;  // Calculates the number of keywords in the array
+
 	// Default constructor
 	Book();
 
 	// Parameterized constructor
 	Book(const MyString& author, const MyString& title, const MyString& genre, const MyString& shortDescription,
-		int yearOfPublishing, const MyString* keyWords, int rating, int isbn);
+		int yearOfPublishing, const MyString* keyWords, int numberOfKeyWords, int rating, int isbn);
 
 	// Copy constructor
 	Book(const Book& other);
@@ -56,8 +57,10 @@ public:
 	void setGenre(const MyString& genre);
 	void setShortDescription(const MyString& shortDescription);
 	void setYearOfPublishing(int yearOfPublishing);
-	void setKeyWords(const MyString* keyWords);
+	void setKeyWords(const MyString* keyWords,int numberOfKeyWords);
 	void setRating(int rating);
+
+	friend std::ostream& operator<<(std::ostream& out, const Book& obj);
 };
 
 #endif // !_BOOK_

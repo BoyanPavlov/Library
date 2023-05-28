@@ -39,3 +39,17 @@ int StringUtils::strCmp(const char* text1, const char* text2)
     }
     return *text1 - *text2;
 }
+
+bool StringUtils::strGreaterThan(const char* text1, const char* text2)
+{
+    while (*text1 && *text1 == *text2)
+    {
+        text1++;
+        text2++;
+    }
+    if (*text1>*text2)
+    {
+        return true;
+    }
+    return false;
+}
