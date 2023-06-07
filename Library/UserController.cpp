@@ -19,7 +19,7 @@ const MyVector<UserControllerItem>& UserController::getUsers() const
 UserControllerItem& UserController::getUser(const MyString& user)
 {
 	int index = getUserIndex(user);
-	if (index>=0)
+	if (index >= 0)
 	{
 		return _users[index];
 	}
@@ -34,7 +34,7 @@ UserController& UserController::getInstance()
 
 int UserController::getUserIndex(const MyString& username)
 {
-	for (size_t i = 0; i < _users.getSize() ; i++)
+	for (size_t i = 0; i < _users.getSize(); i++)
 	{
 		if (_users[i].getUsername() == username)
 		{
@@ -117,7 +117,15 @@ void UserController::addUser(const MyString& userName, const MyString& password,
 void UserController::removeUser(const MyString& userName)
 {
 	int index = getUserIndex(userName);
-	_users.removeAt(index);
+	if (index >= 0)
+	{
+		_users.removeAt(index);
+		cout << "User removed succesfully\n";
+	}
+	else
+	{
+		cout << "Problem in removing a user\n";
+	}
 }
 
 bool UserController::checkIfUserAlreadyExist(const MyString& userName)

@@ -1,5 +1,6 @@
 #include "MyString.h"
 #include "StringUtils.h"
+#pragma warning(disable : 4996)
 
 
 char* MyString::allocateString(size_t len)
@@ -37,7 +38,7 @@ void MyString::resize()
 	try
 	{
 		char* buffer = allocateString(_capacity);
-		StringUtils::strCpy(buffer, _str);
+		strcpy(buffer, _str);
 		freeMem();
 		_str = buffer;
 
@@ -62,7 +63,7 @@ MyString::MyString(const MyString& other)
 		try
 		{
 			_str = allocateString(_size);
-			StringUtils::strCpy(_str, other._str);
+			strcpy(_str, other._str);
 		}
 		catch (...)
 		{
@@ -73,19 +74,23 @@ MyString::MyString(const MyString& other)
 
 MyString& MyString::operator=(const MyString& other)
 {
-	freeMem();
-	_capacity = other._size;
-	_size = other._size;
-
-	try
-	{
-		_str = allocateString(_size);
-		StringUtils::strCpy(_str, other._str);
-	}
-	catch (...)
+	if (this != &other)
 	{
 		freeMem();
+		_capacity = other._size;
+		_size = other._size;
+
+		try
+		{
+			_str = allocateString(_size);
+			strcpy(_str, other._str);
+		}
+		catch (...)
+		{
+			freeMem();
+		}
 	}
+
 	return *this;
 }
 
@@ -105,10 +110,14 @@ MyString::MyString(MyString&& obj)
 
 MyString& MyString::operator=(MyString&& obj)
 {
-	freeMem();
-	std::swap(_str, obj._str);
-	std::swap(_capacity, obj._capacity);
-	std::swap(_size, obj._capacity);
+	if (this != &obj)
+	{
+		freeMem();
+		std::swap(_str, obj._str);
+		std::swap(_capacity, obj._capacity);
+		std::swap(_size, obj._size);
+		return *this;
+	}
 	return *this;
 }
 
@@ -123,7 +132,7 @@ MyString::MyString(const char* text)
 		try
 		{
 			_str = allocateString(_size);
-			StringUtils::strCpy(_str, text);
+			strcpy(_str, text);
 		}
 		catch (...)
 		{
@@ -357,7 +366,7 @@ std::ostream& operator<<(std::ostream& out, const MyString& obj)
 {
 	if (obj._str)
 	{
-		out << obj._str;
+		out << obj.c_str();
 	}
 	return out;
 }

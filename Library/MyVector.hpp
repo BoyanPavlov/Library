@@ -21,11 +21,11 @@ private:
 
 public:
 
-	int getSize() const;
+	size_t getSize() const;
 
 	MyVector(std::initializer_list<T> elements);
 
-	//MyVector();
+	//MyVector():MyVector(0){}
 
 	explicit MyVector(int initialCapacity = 10);
 
@@ -41,7 +41,7 @@ public:
 	template <class Y>
 	MyVector& operator=(const MyVector<Y>& obj);
 
-	void push(T element);
+	void push(const T& element);
 
 	void remove();
 
@@ -117,12 +117,13 @@ void MyVector<T>::resizeVector()
 	{
 		cerr << e.what() << endl;
 		freeMem();
+		delete[] tmp;
 	}
 }
 
 
 template <class T>
-int MyVector<T>::getSize() const
+size_t MyVector<T>::getSize() const
 {
 	return _size;
 }
@@ -135,10 +136,12 @@ MyVector<T>::MyVector(std::initializer_list<T> elements)
 	std::copy(elements.begin(), elements.end(), _arr);
 }
 
+//
 //template <class T>
 //MyVector<T>::MyVector()
-//	:_arr(nullptr), _size(0), _capacity(0)
+//	:_arr(nullptr), _size(0), _capacity(10)
 //{
+//	_arr = allocateArr(10);
 //}
 
 
@@ -253,7 +256,7 @@ MyVector<T>& MyVector<T>::operator=(const MyVector<Y>& obj)
 }
 
 template <class T>
-void MyVector<T>::push(T element)
+void MyVector<T>::push(const T& element)
 {
 	if (_size == _capacity)
 	{
@@ -272,7 +275,7 @@ void MyVector<T>::remove()
 template <class T>
 void MyVector<T>::removeAt(size_t pos)
 {
-	if (!(pos < _size && pos >= 0))
+	if (pos >= _size)
 	{
 		throw std::invalid_argument("Invalid index give\n");
 	}

@@ -13,6 +13,11 @@ private:
 
 	UserController() = default;
 public:
+	static UserController& getInstance();
+
+	UserController(const UserController&) = delete;
+	UserController& operator=(const UserController&) = delete;
+
 	bool checkIfUserAlreadyExist(const MyString& userName);
 	int getUserIndex(const MyString& username);
 
@@ -20,11 +25,6 @@ public:
 	const MyVector<UserControllerItem>& getUsers() const;
 
 	UserControllerItem& getUser(const MyString& user);
-
-	static UserController& getInstance();
-
-	UserController(const UserController&) = delete;
-	UserController& operator=(const UserController&) = delete;
 
 	void login(const MyString& user);
 	void logout(const MyString& user);

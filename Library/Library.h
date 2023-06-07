@@ -18,8 +18,7 @@ private:
 	void sortBooksByRatingHelper(MyVector<Book>& books, Book currentBook, int size, bool acs);
 	void sortBooksByYearHelper(MyVector<Book>& books, Book currentBook, int size, bool acs);
 public:
-
-	Library();
+	Library() : _books(10) {}
 
 	const MyVector<Book>& getBooks() const;
 

@@ -19,7 +19,6 @@ Book::Book(const MyString& author, const MyString& title,
 Book::Book()
 	: _yearOfPublishing(0), _rating(0), _isbn(0)
 {
-
 }
 
 const MyString& Book::getAuthor() const
@@ -92,6 +91,16 @@ void Book::setRating(int rating)
 	_rating = rating;
 }
 
+void Book::setISBN(int isbn)
+{
+	_isbn=isbn;
+}
+
+void Book::addKeyWord(const MyString& word)
+{
+	_keyWords.push(word);
+}
+
 int Book::getISBN() const
 {
 	return _isbn;
@@ -115,6 +124,13 @@ std::ostream& operator<<(std::ostream& out, const Book& obj)
 	out << "Title: " << obj.getTitle() << "\n"
 		<< "Author: " << obj.getAuthor() << "\n"
 		<< "Genre: " << obj.getGenre() << "\n"
-		<< "ISBN: " << obj.getISBN() << "\n";
+		<< "ISBN: " << obj.getISBN() << "\n"
+		<< "Year of publishing: " << obj.getYearOfPublishing() << "\n"
+		<< "Keywords: " << '\n';
+	for (size_t j = 0; j < obj.getKeyWords().getSize(); j++)
+	{
+		out << obj.getKeyWords()[j] << "\n";
+	}
+	out << "Short description: " << obj.getShortDescription() << "\n";
 	return out;
 }

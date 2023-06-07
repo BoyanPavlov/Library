@@ -2,18 +2,12 @@
 //
 
 #include <iostream>
-#include "MyString.h"
-#include "Book.h"
-#include "UserController.h"
+#include "UI.h"
 
-/*int main()
+int main()
 {
-	UserController& instace = UserController::getInstance();
-	MyString username = "Iliev";
-	MyString password = "salam1";
+	UI& instance = UI::getInstance();
+	instance.start();
 
-	instace.addUser(username, password);
-	instace.addUser(username, password);
-	instace.login(username);
 	return 0;
-}*/
+}

@@ -44,6 +44,8 @@ public:
 	void setYearOfPublishing(int yearOfPublishing);
 	void setKeyWords(MyVector<MyString> keywords);
 	void setRating(int rating);
+	void setISBN(int isbn);
+	void addKeyWord(const MyString& word);
 
 	bool operator==(const Book& obj);
 	friend std::ostream& operator<<(std::ostream& out, const Book& obj);

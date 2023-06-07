@@ -5,22 +5,24 @@ using std::cin;
 using std::endl;
 using std::cerr;
 
-
-Library::Library()
-{
-}
-
-
 const MyVector<Book>& Library::getBooks() const {
 	return _books;
 }
 
 void Library::printAll() {
+	if (_books.getSize()==0)
+	{
+		cout << "No books in the library\n";
+		return;
+	}
+
 	for (int i = 0; i < _books.getSize(); i++) {
-		cout << _books[i] << endl;
+		cout << "Title: " << _books[i].getTitle() << "\n"
+			<< "Author: " << _books[i].getAuthor() << "\n"
+			<< "Genre: " << _books[i].getGenre() << "\n"
+			<< "ISBN: " << _books[i].getISBN() << "\n";
 	}
 }
-
 void Library::bookInfo(int isbn)
 {
 	for (int i = 0; i < _books.getSize(); i++)

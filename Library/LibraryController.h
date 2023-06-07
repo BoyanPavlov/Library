@@ -1,5 +1,6 @@
 #pragma once
 #include "Library.h"
+#include <sstream>
 
 #ifndef _LIBRARY_CONTROLLER
 #define _LIBRARY_CONTROLLER
@@ -8,16 +9,15 @@ class LibraryController
 {
 private:
 	Library _library;
-	bool _hasAccess = false;
 
 	LibraryController() = default;
 public:
 	LibraryController(const LibraryController& obj) = delete;
 	LibraryController& operator=(const LibraryController& obj) = delete;
 
-	static LibraryController& getIntance();
+	static LibraryController& getInstance();
 
-	void setAccessLevel(bool access);
+	void loadLibrary(const MyString& input);
 
 	void printAll();// prints all books: title, author, genre, isbn
 
@@ -30,7 +30,8 @@ public:
 	void sortBook(const MyString& option, const MyString& AscendingOrDecending);//sort books by author, title, rating and year
 
 	void findBook(const MyString& option, const MyString& input);//finds a book by genre, title or author
+
+	friend std::ostream& operator<<(std::ostream& out, const LibraryController& obj);
 };
 
 #endif // !_LIBRARY_CONTROLLER
-

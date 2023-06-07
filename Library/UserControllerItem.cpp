@@ -1,9 +1,8 @@
 #include "UserControllerItem.h"
 
 UserControllerItem::UserControllerItem(const MyString& username, const MyString& password, int accessLevel)
-	: User(username, password, accessLevel)
+	: User(username, password, accessLevel), _isLogged(false)
 {
-	_isLogged = false;
 }
 
 void UserControllerItem::logUser()
